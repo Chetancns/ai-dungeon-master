@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚔️ AI Dungeon Master</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="landing-hero">
+    <h1>⚔️ AI Dungeon Master</h1>
+    <p>Embark on an AI-powered RPG adventure — solo or with friends.</p>
+  </header>
+
+  <main class="landing-grid">
+
+    <!-- CREATE GAME CARD -->
+    <div class="card">
+      <h2>⚔️ Create New Game</h2>
+      <p class="text-muted" style="font-size:0.85rem;margin-bottom:16px;">
+        Set up a new adventure and invite your party.
+      </p>
+
+      <div id="create-alert"></div>
+
+      <form id="create-form">
+        <div class="form-group">
+          <label for="c-player-name">Your Name</label>
+          <input id="c-player-name" type="text" placeholder="e.g. Chethan" required />
+        </div>
+        <div class="form-group">
+          <label for="c-char-name">Character Name</label>
+          <input id="c-char-name" type="text" placeholder="e.g. Kael" required />
+        </div>
+        <div class="form-group">
+          <label for="c-char-class">Character Class</label>
+          <select id="c-char-class" required>
+            <option value="">— Choose class —</option>
+            <option>Warrior</option>
+            <option>Mage</option>
+            <option>Rogue</option>
+            <option>Ranger</option>
+            <option>Cleric</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="c-game-style">Game Style</label>
+          <select id="c-game-style" required>
+            <option value="">— Choose style —</option>
+            <option>Fantasy</option>
+            <option>Sci-Fi</option>
+            <option>Horror</option>
+            <option>Mystery</option>
+            <option>Post-Apocalyptic</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="c-max-players">Max Players (1–4)</label>
+          <select id="c-max-players" required>
+            <option value="1">1 — Solo</option>
+            <option value="2">2 — Duo</option>
+            <option value="3">3 — Trio</option>
+            <option value="4">4 — Party</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">
+          Create Game
+        </button>
+      </form>
+    </div>
+
+    <!-- JOIN GAME CARD -->
+    <div class="card">
+      <h2>🚪 Join Existing Game</h2>
+      <p class="text-muted" style="font-size:0.85rem;margin-bottom:16px;">
+        Got a Game ID from a friend? Jump right in!
+      </p>
+
+      <div id="join-alert"></div>
+
+      <form id="join-form">
+        <div class="form-group">
+          <label for="j-game-id">Game ID</label>
+          <input id="j-game-id" type="text" placeholder="e.g. XK92PL" maxlength="6"
+                 style="text-transform:uppercase;letter-spacing:0.2em;" required />
+        </div>
+        <div class="form-group">
+          <label for="j-player-name">Your Name</label>
+          <input id="j-player-name" type="text" placeholder="e.g. Alice" required />
+        </div>
+        <div class="form-group">
+          <label for="j-char-name">Character Name</label>
+          <input id="j-char-name" type="text" placeholder="e.g. Lyra" required />
+        </div>
+        <div class="form-group">
+          <label for="j-char-class">Character Class</label>
+          <select id="j-char-class" required>
+            <option value="">— Choose class —</option>
+            <option>Warrior</option>
+            <option>Mage</option>
+            <option>Rogue</option>
+            <option>Ranger</option>
+            <option>Cleric</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">
+          Join Game
+        </button>
+      </form>
+    </div>
+
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
