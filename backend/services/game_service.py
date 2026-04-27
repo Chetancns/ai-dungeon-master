@@ -97,6 +97,8 @@ def start_game(game_id: str, player_id: str) -> GameSession:
     if session.status != GameStatus.waiting:
         raise ValueError("Game is not in waiting state")
     session.status = GameStatus.in_progress
+    if session.players:
+        session.current_turn_player_id = session.players[0].player_id
     return session
 
 
@@ -109,8 +111,23 @@ def append_story_event(game_id: str, event: StoryEvent) -> GameSession:
     return session
 
 
-def leave_game(game_id: str, player_id: str) -> GameSession:
-    """Remove a player from a game session."""
+def advance_turn(game_id: str) -> GameSession:
+    """Rotate current_turn_player_id to the next player in the list."""
+    session = _games.get(game_id)
+    if session is None:
+        raise ValueError("Game not found")
+    if not session.players:
+        return session
+    ids = [p.player_id for p in session.players]
+    try:
+        idx = ids.index(session.current_turn_player_id)
+    except ValueError:
+        idx = -1
+    session.current_turn_player_id = ids[(idx + 1) % len(ids)]
+    return session
+
+
+def leave_game(game_id: str, player_id: str) -> GameSession:    """Remove a player from a game session."""
     session = _games.get(game_id)
     if session is None:
         raise ValueError("Game not found")

@@ -9,6 +9,8 @@ if (!gameId || !playerId) {
 let knownLogLength = 0;
 let pollInterval   = null;
 let isSubmitting   = false;
+let currentTurnPlayerId = null;
+let gamePlayers = [];
 
 const classEmoji = { Warrior:'⚔️', Mage:'🔮', Rogue:'🗡️', Ranger:'🏹', Cleric:'✨' };
 
@@ -71,7 +73,12 @@ function renderEvent(event) {
         const btn = document.createElement('button');
         btn.className = 'choice-chip';
         btn.textContent = choice.charAt(0).toUpperCase() + choice.slice(1);
-        btn.addEventListener('click', () => fillAction(btn.textContent));
+        const myTurn = !currentTurnPlayerId || gamePlayers.length <= 1 || currentTurnPlayerId === playerId;
+        btn.disabled = !myTurn;
+        btn.addEventListener('click', () => {
+          const isMine = !currentTurnPlayerId || gamePlayers.length <= 1 || currentTurnPlayerId === playerId;
+          if (isMine) fillAction(btn.textContent);
+        });
         chipsDiv.appendChild(btn);
       });
       div.appendChild(chipsDiv);
@@ -122,13 +129,35 @@ function scrollToBottom() {
 
 // ── Sidebar ────────────────────────────────────────────────
 function renderSidebar(players) {
+  gamePlayers = players;
   const container = document.getElementById('sidebar-players');
   container.innerHTML = players.map(p => `
-    <div class="sidebar-player">
+    <div class="sidebar-player${p.player_id === currentTurnPlayerId ? ' turn-active' : ''}">
       <strong>${classEmoji[p.character_class] || '🎲'} ${p.character_name}</strong>
       <small>${p.player_name} · ${p.character_class}</small>
     </div>
   `).join('');
+}
+
+// ── Turn banner ────────────────────────────────────────────
+function updateTurnUI() {
+  const banner = document.getElementById('turn-banner');
+  if (!banner) return;
+  // Single-player or no turn info: hide banner
+  if (!currentTurnPlayerId || gamePlayers.length <= 1) {
+    banner.style.display = 'none';
+    return;
+  }
+  const turnPlayer = gamePlayers.find(p => p.player_id === currentTurnPlayerId);
+  if (!turnPlayer) { banner.style.display = 'none'; return; }
+  banner.style.display = 'block';
+  if (currentTurnPlayerId === playerId) {
+    banner.textContent = `⚔️ Your turn, ${turnPlayer.character_name}!`;
+    banner.className = 'turn-banner turn-mine';
+  } else {
+    banner.textContent = `⏳ Waiting for ${turnPlayer.character_name}…`;
+    banner.className = 'turn-banner turn-waiting';
+  }
 }
 
 // ── Thinking indicator ─────────────────────────────────────
@@ -156,6 +185,7 @@ async function poll() {
     // Update top bar
     document.getElementById('tb-style').textContent  = data.game_style;
     document.getElementById('tb-game-id').textContent = data.game_id;
+    currentTurnPlayerId = data.current_turn_player_id || null;
     renderSidebar(data.players);
 
     // Append only NEW story events
@@ -195,9 +225,13 @@ async function poll() {
 }
 
 function setInputEnabled(enabled) {
-  actionInput.disabled = !enabled;
-  actionBtn.disabled   = !enabled;
-  if (enabled) actionInput.focus();
+  // In multi-player, only enable when it's this player's turn
+  const myTurn = !currentTurnPlayerId || gamePlayers.length <= 1 || currentTurnPlayerId === playerId;
+  const actuallyEnabled = enabled && myTurn;
+  actionInput.disabled = !actuallyEnabled;
+  actionBtn.disabled   = !actuallyEnabled;
+  if (actuallyEnabled) actionInput.focus();
+  updateTurnUI();
 }
 
 // ── Submit Action ──────────────────────────────────────────
@@ -220,6 +254,11 @@ async function submitAction() {
     if (!res.ok) throw new Error(data.detail || 'Action failed');
 
     hideThinking();
+
+    // Update turn state from action response
+    if (data.current_turn_player_id !== undefined) {
+      currentTurnPlayerId = data.current_turn_player_id || null;
+    }
 
     // Render any new events returned directly (avoids waiting for next poll)
     const newEvents = data.story_log.slice(knownLogLength);

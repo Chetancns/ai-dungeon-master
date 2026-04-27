@@ -48,6 +48,7 @@ class GameSession(BaseModel):
     status: GameStatus = GameStatus.waiting
     story_log: List[StoryEvent] = []
     created_at: str
+    current_turn_player_id: Optional[str] = None
 
 
 # Request / Response models
@@ -93,3 +94,4 @@ class ActionRequest(BaseModel):
 class ActionResponse(BaseModel):
     dm_response: str
     story_log: List[StoryEvent]
+    current_turn_player_id: Optional[str] = None

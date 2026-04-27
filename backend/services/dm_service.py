@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timezone
+from typing import Optional
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
@@ -17,6 +18,12 @@ def _build_system_prompt(session: GameSession) -> str:
         f"- {p.player_name} ({p.character_class} named {p.character_name})"
         for p in session.players
     )
+    multi_player_note = (
+        "\n- Players take turns acting. After narrating the result of the current player's action, "
+        "directly address the next player by their CHARACTER name and invite their action with a "
+        "clear prompt or choice."
+        if len(session.players) > 1 else ""
+    )
     return (
         f"You are an expert Dungeon Master running a {session.game_style} RPG adventure.\n\n"
         f"The players in this session are:\n{player_lines}\n\n"
@@ -29,6 +36,7 @@ def _build_system_prompt(session: GameSession) -> str:
         "- Create tension, mystery, and fun — be creative!\n"
         "- When multiple players are present, include all characters in the narrative\n"
         "- Never break character"
+        + multi_player_note
     )
 
 
@@ -67,11 +75,16 @@ def generate_opening(session: GameSession) -> str:
     player_descriptions = ", ".join(
         f"{p.character_name} the {p.character_class}" for p in session.players
     )
+    first_player_prompt = (
+        f" End by directly addressing {session.players[0].character_name} "
+        "and prompting them for their first action."
+        if player_count > 1 else ""
+    )
     opening_prompt = (
         f"The adventure begins! Set the scene for our {session.game_style} adventure "
         f"with {player_count} adventurer(s): {player_descriptions}. "
         "Introduce the world, the immediate situation, and give the players their first "
-        "challenge or hook. Make it exciting!"
+        f"challenge or hook. Make it exciting!{first_player_prompt}"
     )
     chain = _get_chain(session)
     response = chain.invoke(
@@ -81,9 +94,20 @@ def generate_opening(session: GameSession) -> str:
     return response.content
 
 
-def process_action(session: GameSession, player_name: str, character_name: str, action: str) -> str:
+def process_action(
+    session: GameSession,
+    player_name: str,
+    character_name: str,
+    action: str,
+    next_character_name: Optional[str] = None,
+) -> str:
     """Process a player action and return the DM's response."""
     human_message = f"[{player_name} as {character_name}]: {action}"
+    if next_character_name and len(session.players) > 1:
+        human_message += (
+            f"\n(After narrating the result, address {next_character_name} directly "
+            "and prompt them for their next action.)"
+        )
     chain = _get_chain(session)
     response = chain.invoke(
         {"input": human_message},
