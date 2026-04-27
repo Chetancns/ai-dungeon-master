@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from models.schemas import GameSession, GameStatus, Player, StoryEvent
+from backend.models.schemas import GameSession, GameStatus, Player, StoryEvent
 
 # In-memory store: game_id -> GameSession
 _games: dict[str, GameSession] = {}

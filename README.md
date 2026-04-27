@@ -76,8 +76,7 @@ cd ai-dungeon-master
 
 ### 2. Install Python dependencies
 ```bash
-cd backend
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 ```
 
 ### 3. Configure your OpenAI API key
@@ -89,7 +88,7 @@ cp .env.example .env
 
 ### 4. Start the backend server
 ```bash
-uvicorn main:app --reload
+uvicorn backend.main:app --reload
 ```
 The API will be available at `http://localhost:8000`.  
 Interactive API docs: `http://localhost:8000/docs`
@@ -129,7 +128,7 @@ Open `frontend/index.html` in your browser (or use VS Code **Live Server** exten
 |-------|-----------|
 | **Backend** | [FastAPI](https://fastapi.tiangolo.com/) + Python |
 | **AI / LLM** | [OpenAI GPT-4o](https://openai.com/) via [LangChain](https://langchain.com/) |
-| **Memory** | LangChain `ConversationBufferMemory` (per session) |
+| **Memory** | LangChain `InMemoryChatMessageHistory` (per session) |
 | **Frontend** | Vanilla HTML / CSS / JavaScript |
 | **Fonts** | Google Fonts — Cinzel + Lato |
 | **Session Storage** | In-memory Python dict (no database required) |

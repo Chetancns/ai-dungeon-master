@@ -2,8 +2,8 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException
 
-from models.schemas import ActionRequest, ActionResponse, StoryEvent
-from services import game_service, dm_service
+from backend.models.schemas import ActionRequest, ActionResponse, StoryEvent
+from backend.services import game_service, dm_service
 
 router = APIRouter(prefix="/api/action", tags=["action"])
 

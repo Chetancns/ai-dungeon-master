@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import game, action
+from backend.routers import game, action
 
 app = FastAPI(title="AI Dungeon Master", version="1.0.0")
 
