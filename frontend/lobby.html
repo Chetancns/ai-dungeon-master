@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚔️ Lobby — AI Dungeon Master</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="lobby-container">
+
+    <header style="text-align:center; margin-bottom:32px;">
+      <h1>⚔️ AI Dungeon Master</h1>
+      <p class="text-muted">Game Lobby</p>
+    </header>
+
+    <!-- Game ID Box -->
+    <div class="game-id-box">
+      <p class="text-muted" style="font-size:0.8rem;letter-spacing:0.15em;margin-bottom:8px;">GAME ID — SHARE WITH FRIENDS</p>
+      <div class="game-id-value" id="game-id-display">——————</div>
+      <button class="btn mt-2" id="copy-btn" onclick="copyGameId()">📋 Copy ID</button>
+    </div>
+
+    <div id="lobby-alert"></div>
+
+    <!-- Game Info -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <span class="badge" id="style-badge">—</span>
+        <span class="text-muted" style="font-size:0.85rem;" id="player-count-info">—</span>
+      </div>
+    </div>
+
+    <!-- Player List -->
+    <div class="card" style="margin-bottom:20px;">
+      <h3 style="margin-bottom:16px;">🧙 Adventurers</h3>
+      <div id="player-list">
+        <p class="waiting-msg">Loading…</p>
+      </div>
+      <p class="waiting-msg" id="waiting-msg" style="display:none;">⏳ Waiting for more players to join…</p>
+    </div>
+
+    <!-- Actions -->
+    <div style="text-align:center;">
+      <button class="btn btn-primary" id="start-btn" disabled onclick="startGame()" style="width:100%;max-width:320px;">
+        ⚔️ Start Adventure
+      </button>
+      <p class="text-muted mt-2" id="start-hint" style="font-size:0.85rem;"></p>
+    </div>
+
+  </div>
+
+  <script src="js/lobby.js"></script>
+</body>
+</html>

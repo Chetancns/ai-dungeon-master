@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚔️ Adventure — AI Dungeon Master</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="game-layout">
+
+    <!-- Top Bar -->
+    <header class="game-topbar">
+      <h1>⚔️ AI Dungeon Master</h1>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <span class="badge" id="tb-style">—</span>
+        <span class="text-muted" style="font-size:0.8rem;">ID: <strong id="tb-game-id" class="text-gold">—</strong></span>
+        <button class="btn btn-danger" onclick="leaveGame()" style="padding:6px 14px;font-size:0.8rem;">🚪 Leave</button>
+      </div>
+    </header>
+
+    <!-- Story Log -->
+    <section class="story-log-panel" id="story-log-panel">
+      <div class="story-parchment" id="story-parchment">
+        <div class="waiting-msg" id="story-placeholder">
+          <span class="spinner"></span>&nbsp; Loading adventure…
+        </div>
+      </div>
+    </section>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3>🧙 Party</h3>
+      <div id="sidebar-players">
+        <p class="text-muted" style="font-size:0.8rem;">Loading…</p>
+      </div>
+    </aside>
+
+    <!-- Action Panel -->
+    <div class="action-panel">
+      <div id="turn-banner" class="turn-banner"></div>
+      <textarea id="action-input" placeholder="What do you do? (press Ctrl+Enter to submit)"
+                rows="2" disabled></textarea>
+      <button class="btn btn-primary" id="action-btn" onclick="submitAction()" disabled>
+        ⚔️ Submit Action
+      </button>
+    </div>
+
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
