@@ -61,7 +61,51 @@ function renderEvent(event) {
     <div class="story-event-header">${header} <span class="text-muted" style="font-weight:300;font-size:0.75rem;">${ts}</span></div>
     <div class="story-event-content">${escapeHtml(event.content).replace(/\n/g, '<br>')}</div>
   `;
+
+  if (event.role === 'dm') {
+    const choices = parseChoices(event.content);
+    if (choices.length >= 2) {
+      const chipsDiv = document.createElement('div');
+      chipsDiv.className = 'choice-chips';
+      choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-chip';
+        btn.textContent = choice.charAt(0).toUpperCase() + choice.slice(1);
+        btn.addEventListener('click', () => fillAction(btn.textContent));
+        chipsDiv.appendChild(btn);
+      });
+      div.appendChild(chipsDiv);
+    }
+  }
+
   return div;
+}
+
+// ── Parse selectable choices from a DM message ─────────────
+function parseChoices(text) {
+  // Split into segments on sentence boundaries
+  const segments = text.split(/[.!?\n]+/).filter(s => /,\s*or\b/i.test(s));
+  if (!segments.length) return [];
+
+  // Use the last segment that contains a comma-separated "or"
+  const src = segments[segments.length - 1];
+  const parts = src.split(/,\s*or\s+/i);
+  if (parts.length < 2 || parts.length > 4) return [];
+
+  return parts.map(p => {
+    // Strip any leading framing before a colon (e.g., "The choice is yours:")
+    const colon = p.lastIndexOf(':');
+    if (colon !== -1 && colon < p.length - 2) p = p.slice(colon + 1);
+    return p.replace(/^[^a-zA-Z]+/, '').replace(/[^a-zA-Z0-9)'"]+$/, '').trim();
+  }).filter(p => p.length >= 5 && p.length <= 120);
+}
+
+// ── Fill action textarea with a chosen option ──────────────
+function fillAction(text) {
+  actionInput.value = text;
+  actionInput.disabled = false;
+  actionBtn.disabled = false;
+  actionInput.focus();
 }
 
 function escapeHtml(text) {

@@ -289,8 +289,8 @@ a:hover { color: var(--gold-light); }
    ============================================================ */
 .game-layout {
   display: grid;
-  grid-template-columns: 1fr 240px;
-  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto auto;
   height: 100vh;
   overflow: hidden;
 }
@@ -369,21 +369,27 @@ a:hover { color: var(--gold-light); }
 }
 .action-panel .btn { flex-shrink: 0; align-self: flex-end; }
 
-/* Sidebar */
+/* Sidebar — now a horizontal party strip */
 .sidebar {
-  grid-row: 2 / 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
   background: var(--bg-card);
-  border-left: 1px solid var(--border);
-  padding: 16px;
-  overflow-y: auto;
+  border-top: 1px solid var(--border);
+  overflow: visible;
 }
-.sidebar h3 { font-size: 0.9rem; margin-bottom: 12px; }
+.sidebar h3 { font-size: 0.8rem; margin-bottom: 0; margin-right: 4px; flex-shrink: 0; }
 .sidebar-player {
-  padding: 10px;
+  padding: 5px 12px;
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0;
 }
 .sidebar-player strong { color: var(--gold); font-size: 0.85rem; }
 .sidebar-player small { display: block; color: var(--text-muted); font-size: 0.75rem; }
@@ -401,22 +407,33 @@ a:hover { color: var(--gold-light); }
   margin-bottom: 12px;
 }
 
+/* Choice chips — selectable options beneath a DM message */
+.choice-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.choice-chip {
+  padding: 6px 16px;
+  border: 1px solid var(--gold-dark);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--gold);
+  font-size: 0.85rem;
+  font-family: 'Lato', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  text-align: left;
+  white-space: normal;
+  line-height: 1.4;
+}
+.choice-chip:hover {
+  background: var(--gold-dark);
+  color: #fff;
+}
+
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .game-layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto auto;
-  }
-  .sidebar {
-    grid-row: auto;
-    border-left: none;
-    border-top: 1px solid var(--border);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 12px 16px;
-  }
-  .sidebar h3 { width: 100%; margin-bottom: 4px; }
   .sidebar-player { flex: 1 1 140px; }
-  .action-panel { grid-column: 1; }
 }
