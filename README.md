@@ -25,7 +25,8 @@ A full-stack AI-powered RPG web application where users can **create or join gam
 
 ## 📸 Screenshots
 
-> *Add screenshots here after running the app locally.*
+<img width="1105" height="866" alt="image" src="https://github.com/user-attachments/assets/d48ba333-c5e4-4585-8088-f1ae0aae6b3d" />
+
 
 ---
 
