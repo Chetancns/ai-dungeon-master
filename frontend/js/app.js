@@ -30,7 +30,7 @@ document.getElementById('create-form').addEventListener('submit', async (e) => {
     if (!res.ok) throw new Error(data.detail || 'Failed to create game');
 
     localStorage.setItem('game_id',   data.game_id);
-    localStorage.setItem('player_id', data.player_id);
+    localStorage.setItem('player_id_' + data.game_id, data.player_id);
     localStorage.setItem('player_name', body.creator_name);
     window.location.href = 'lobby.html';
   } catch (err) {
@@ -64,7 +64,7 @@ document.getElementById('join-form').addEventListener('submit', async (e) => {
     if (!res.ok) throw new Error(data.detail || 'Failed to join game');
 
     localStorage.setItem('game_id',   gameId);
-    localStorage.setItem('player_id', data.player_id);
+    localStorage.setItem('player_id_' + gameId, data.player_id);
     localStorage.setItem('player_name', body.player_name);
     window.location.href = 'lobby.html';
   } catch (err) {

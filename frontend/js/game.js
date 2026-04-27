@@ -1,6 +1,6 @@
 const API_BASE  = 'http://localhost:8000';
 const gameId   = localStorage.getItem('game_id');
-const playerId = localStorage.getItem('player_id');
+const playerId = localStorage.getItem('player_id_' + gameId);
 
 if (!gameId || !playerId) {
   window.location.href = 'index.html';
@@ -187,6 +187,7 @@ async function poll() {
     document.getElementById('tb-game-id').textContent = data.game_id;
     currentTurnPlayerId = data.current_turn_player_id || null;
     renderSidebar(data.players);
+    updateTurnUI();
 
     // Append only NEW story events
     if (data.story_log.length > knownLogLength) {
@@ -291,7 +292,7 @@ async function leaveGame() {
     });
   } catch (_) {}
   localStorage.removeItem('game_id');
-  localStorage.removeItem('player_id');
+  localStorage.removeItem('player_id_' + gameId);
   localStorage.removeItem('player_name');
   window.location.href = 'index.html';
 }

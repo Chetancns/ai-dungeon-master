@@ -1,6 +1,6 @@
 const API_BASE   = 'http://localhost:8000';
 const gameId    = localStorage.getItem('game_id');
-const playerId  = localStorage.getItem('player_id');
+const playerId  = localStorage.getItem('player_id_' + gameId);
 
 if (!gameId || !playerId) {
   window.location.href = 'index.html';
