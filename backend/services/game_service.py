@@ -127,7 +127,8 @@ def advance_turn(game_id: str) -> GameSession:
     return session
 
 
-def leave_game(game_id: str, player_id: str) -> GameSession:    """Remove a player from a game session."""
+def leave_game(game_id: str, player_id: str) -> GameSession:
+    """Remove a player from a game session."""
     session = _games.get(game_id)
     if session is None:
         raise ValueError("Game not found")
