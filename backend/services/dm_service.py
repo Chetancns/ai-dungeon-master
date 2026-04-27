@@ -35,7 +35,15 @@ def _build_system_prompt(session: GameSession) -> str:
         "- Address players by their CHARACTER names\n"
         "- Create tension, mystery, and fun — be creative!\n"
         "- When multiple players are present, include all characters in the narrative\n"
-        "- Never break character"
+        "- Never break character\n"
+        "- Always end EVERY response with exactly 2-4 short, concrete options for the active "
+        "player to choose from, formatted as a block that begins with the line 'OPTIONS:' "
+        "followed by numbered items, like:\n"
+        "OPTIONS:\n"
+        "1. <first option>\n"
+        "2. <second option>\n"
+        "3. <third option (optional)>\n"
+        "Do NOT embed the options inside the narrative prose — place them only in the OPTIONS block."
         + multi_player_note
     )
 

@@ -59,9 +59,13 @@ function renderEvent(event) {
 
   const ts = new Date(event.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+  const displayContent = event.role === 'dm'
+    ? event.content.replace(/\n?OPTIONS:\s*\n(?:\d+\.\s*.+(?:\n|$))+/i, '').trim()
+    : event.content;
+
   div.innerHTML = `
     <div class="story-event-header">${header} <span class="text-muted" style="font-weight:300;font-size:0.75rem;">${ts}</span></div>
-    <div class="story-event-content">${escapeHtml(event.content).replace(/\n/g, '<br>')}</div>
+    <div class="story-event-content">${escapeHtml(displayContent).replace(/\n/g, '<br>')}</div>
   `;
 
   if (event.role === 'dm') {
@@ -90,7 +94,17 @@ function renderEvent(event) {
 
 // ── Parse selectable choices from a DM message ─────────────
 function parseChoices(text) {
-  // Split into segments on sentence boundaries
+  // Primary: structured OPTIONS block produced by the DM prompt instruction
+  const blockMatch = text.match(/OPTIONS:\s*\n((?:\d+\.\s*.+(?:\n|$))+)/i);
+  if (blockMatch) {
+    const choices = blockMatch[1]
+      .split('\n')
+      .map(line => line.replace(/^\d+\.\s*/, '').trim())
+      .filter(line => line.length >= 3 && line.length <= 120);
+    if (choices.length >= 2) return choices;
+  }
+
+  // Fallback: last sentence containing a comma-separated "or"
   const segments = text.split(/[.!?\n]+/).filter(s => /,\s*or\b/i.test(s));
   if (!segments.length) return [];
 
